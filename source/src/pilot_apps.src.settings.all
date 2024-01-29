@@ -883,6 +883,9 @@ sources = {
 		#"hydrophobic_patch_finder",
 		#"report_cavities_for_plugin",
 	],
+	"pilot/robert-bolz" : [
+		"bootcamp",
+	],
 	"pilot/rpache" : [
 		"generate_matcher_constraints",
 		"calibrate_pdb_via_sidechain_optimization",
