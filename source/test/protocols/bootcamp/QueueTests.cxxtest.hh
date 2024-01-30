@@ -20,7 +20,8 @@
 #include <test/core/init_util.hh>
 
 // Project Headers
-
+#include <protocols/bootcamp/Queue.hh>
+#include <utility/VirtualBase.hh>
 
 // Core Headers
 #include <core/pose/Pose.hh>
@@ -34,25 +35,52 @@ static basic::Tracer TR("QueueTests");
 
 class QueueTests : public CxxTest::TestSuite {
 	//Define Variables
-
+	
 public:
-
 	void setUp() {
-		core_init();
-
+	protocols::bootcamp::Queue queue_;
 	}
 
 	void tearDown() {
-
 	}
-
-
 
 	void test_first() {
-       TS_TRACE( "Running my first unit test!" );
-       TS_ASSERT( true );
-
+		TS_TRACE( "This is my first test" );
+		TS_ASSERT( true );
+	}
+	void test_empty() {
+		
+		TS_ASSERT(queue_.is_empty() == true);
+    	TS_TRACE( "This list is empty after initialization" );
+	}
+	void test_enqueue() {
+		std::string var_ = "3";
+		queue_.enqueue(var_);
+		TS_ASSERT(queue_.is_empty() == false);
+		TS_ASSERT(queue_.size() == 1);
+		TS_TRACE( "This list is not empty after enqueue" );
+		TS_TRACE( "This list has size 1" );
+	}
+	void test_dequeue() {
+		queue_.dequeue();
+		std::string var_ = "3";
+		TS_ASSERT(queue_.is_empty() == true);
+    	TS_TRACE( "This list is empty after dequeue" );
+	}
+	void test_dequeue_while_empty() {
+		if (queue_.is_empty() == true) {
+			TS_ASSERT_THROWS_ANYTHING(queue_.dequeue());
+    		TS_TRACE( "Dequeueing an empty list will result in an error" );
+		}
+		
+	}
+	void test_enqueue_not_a_string() {
+		int var_ = 3;
+		TS_FAIL(queue_.enqueue(var_));
+		TS_TRACE( "Enqueueing a non-string variable will result in an error" );
 	}
 
+private:
+	protocols::bootcamp::Queue queue_;
 
 };

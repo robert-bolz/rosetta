@@ -34,7 +34,7 @@ using namespace core;
 using namespace std;
 
 /// @brief A class for a queue of strings
-class Queue : public utility::pointer::ReferenceCount {
+class Queue : public utility::VirtualBase {
 
 public: 
 
@@ -76,7 +76,7 @@ private:
 };
 
 /// @brief A class for a node holding string data 
-class Node : public utility::pointer::ReferenceCount {
+class Node : public utility::VirtualBase {
 
 public: 
 
