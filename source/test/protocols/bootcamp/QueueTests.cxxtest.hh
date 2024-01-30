@@ -58,8 +58,12 @@ public:
 		std::string var_ = "3";
 		queue_.enqueue(var_);
 		TS_ASSERT(queue_.is_empty() == false);
-		TS_ASSERT(queue_.size() == 1);
+		
 		TS_TRACE( "This list is not empty after enqueue" );
+		
+	}
+	void test_size() {
+		TS_ASSERT(queue_.size() == 1);
 		TS_TRACE( "This list has size 1" );
 	}
 	void test_dequeue() {
