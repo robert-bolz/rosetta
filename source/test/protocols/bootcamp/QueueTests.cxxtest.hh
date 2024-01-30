@@ -38,7 +38,8 @@ class QueueTests : public CxxTest::TestSuite {
 	
 public:
 	void setUp() {
-	protocols::bootcamp::Queue queue_;
+		core_init();
+		protocols::bootcamp::Queue queue_;
 	}
 
 	void tearDown() {
@@ -73,11 +74,6 @@ public:
     		TS_TRACE( "Dequeueing an empty list will result in an error" );
 		}
 		
-	}
-	void test_enqueue_not_a_string() {
-		int var_ = 3;
-		TS_FAIL(queue_.enqueue(var_));
-		TS_TRACE( "Enqueueing a non-string variable will result in an error" );
 	}
 
 private:
