@@ -49,29 +49,31 @@ public:
 		TS_TRACE( "This is my first test" );
 		TS_ASSERT( true );
 	}
+
 	void test_empty() {
-		
 		TS_ASSERT(queue_.is_empty() == true);
     	TS_TRACE( "This list is empty after initialization" );
 	}
+
 	void test_enqueue() {
 		std::string var_ = "3";
 		queue_.enqueue(var_);
 		TS_ASSERT(queue_.is_empty() == false);
-		
 		TS_TRACE( "This list is not empty after enqueue" );
-		
 	}
+
 	void test_size() {
 		TS_ASSERT(queue_.size() == 1);
 		TS_TRACE( "This list has size 1" );
 	}
+
 	void test_dequeue() {
 		queue_.dequeue();
 		std::string var_ = "3";
 		TS_ASSERT(queue_.is_empty() == true);
     	TS_TRACE( "This list is empty after dequeue" );
 	}
+	
 	void test_dequeue_while_empty() {
 		if (queue_.is_empty() == true) {
 			TS_ASSERT_THROWS_ANYTHING(queue_.dequeue());
