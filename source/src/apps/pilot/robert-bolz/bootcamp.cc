@@ -49,18 +49,19 @@ core::Real score = sfxn->score( * mypose );
 std::cout << score << std::endl;
 
 protocols::moves::MonteCarlo mc = protocols::moves::MonteCarlo( * mypose , * sfxn , 1.0 );
-
-core::Real uniform_random_number = numeric::random::uniform();
 core::Size total_residues = mypose->size();
-core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
-core::Real pert1 = numeric::random::gaussian();
-core::Real pert2 = numeric::random::gaussian();
-core::Real orig_phi = mypose->phi( randres );
-core::Real orig_psi = mypose->psi( randres );
-mypose->set_phi( randres, orig_phi + pert1 );
-mypose->set_psi( randres, orig_psi + pert2 );
-bool test_bool = mc.boltzmann( * mypose );
-std::cout << test_bool << std::endl;
+for (core::Size i = 1; i <= 5; i++) {
+	core::Real uniform_random_number = numeric::random::uniform();
+	core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
+	core::Real pert1 = numeric::random::gaussian();
+	core::Real pert2 = numeric::random::gaussian();
+	core::Real orig_phi = mypose->phi( randres );
+	core::Real orig_psi = mypose->psi( randres );
+	mypose->set_phi( randres, orig_phi + pert1 );
+	mypose->set_psi( randres, orig_psi + pert2 );
+	bool test_bool = mc.boltzmann( * mypose );
+	std::cout << test_bool << std::endl;
+}
 return 0;
 }
 
