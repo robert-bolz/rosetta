@@ -11,10 +11,21 @@
 #include <basic/options/option.hh>
 #include <basic/options/keys/in.OptionKeys.gen.hh>
 #include <devel/init.hh> 
-#include <core/pose/Pose.fwd.hh>
 #include <utility/pointer/owning_ptr.hh>
+#include <utility/vector1.hh>
+
+#include <core/pose/Pose.fwd.hh>
 #include <core/pose/Pose.hh>
 #include <core/import_pose/import_pose.hh>
+
+#include <core/scoring/ScoreFunction.hh>
+#include <core/scoring/ScoreFunction.fwd.hh>
+#include <core/scoring/ScoreFunctionFactory.hh>
+#include <core/types.hh>
+
+#include <numeric/random/random.hh>
+#include <protocols/moves/MonteCarlo.hh>
+
 //using namespace core::import_pose; //only uncomment if I want to use namespace import pose
 //using namespace core::pose; //only uncomment if I want to use namespace pose
 
@@ -30,7 +41,26 @@ else {
 	std::cout << "You didn’t provide a PDB file with the -in::file::s option" << std::endl;
 	return 1;
 }
-core::pose::PoseOP mypose = core::import_pose::pose_from_file( filenames[1] );
+core::pose::PoseOP mypose = core::import_pose::pose_from_file( filenames[1] ); //this stores the inputed file 'filenames[1]' as a pose using the pose class. Default checks if its a PDB
+
+core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
+
+core::Real score = sfxn->score( * mypose );
+std::cout << score << std::endl;
+
+protocols::moves::MonteCarlo mc = protocols::moves::MonteCarlo( * mypose , * sfxn , 1.0 );
+
+core::Real uniform_random_number = numeric::random::uniform();
+core::Size total_residues = mypose->size();
+core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
+core::Real pert1 = numeric::random::gaussian();
+core::Real pert2 = numeric::random::gaussian();
+core::Real orig_phi = mypose->phi( randres );
+core::Real orig_psi = mypose->psi( randres );
+mypose->set_phi( randres, orig_phi + pert1 );
+mypose->set_psi( randres, orig_psi + pert2 );
+bool test_bool = mc.boltzmann( * mypose );
+std::cout << test_bool << std::endl;
 return 0;
 }
 
