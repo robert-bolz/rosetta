@@ -7,32 +7,39 @@
 // // (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 // // (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-#include <iostream> //this block of includes covers runnning and input files
+//this block of includes covers runnning and input files
+#include <iostream> 
 #include <basic/options/option.hh>
 #include <basic/options/keys/in.OptionKeys.gen.hh>
 #include <devel/init.hh> 
 #include <utility/pointer/owning_ptr.hh>
 #include <utility/vector1.hh>
 
-#include <core/pose/Pose.fwd.hh> //pose incluse statement
+//pose incluse statement
+#include <core/pose/Pose.fwd.hh> 
 #include <core/pose/Pose.hh>
 #include <core/import_pose/import_pose.hh>
 
-#include <core/scoring/ScoreFunction.hh> //score function includes
+//score function includes
+#include <core/scoring/ScoreFunction.hh> 
 #include <core/scoring/ScoreFunction.fwd.hh>
 #include <core/scoring/ScoreFunctionFactory.hh>
 #include <core/types.hh>
 
-#include <numeric/random/random.hh> //random and montecarlo includes
+//random and montecarlo includes
+#include <numeric/random/random.hh> 
 #include <protocols/moves/MonteCarlo.hh>
 
-#include <protocols/moves/PyMOLMover.hh> //pymol viewer includes
+//pymol viewer includes
+#include <protocols/moves/PyMOLMover.hh> 
 
-#include <core/pack/task/PackerTask.hh> //packing include statements
+//packing include statements
+#include <core/pack/task/PackerTask.hh> 
 #include <core/pack/task/TaskFactory.hh>
 #include <core/pack/pack_rotamers.hh>
 
-#include <core/kinematics/MoveMap.hh> //MoveMap and minimization includes
+//MoveMap and minimization includes
+#include <core/kinematics/MoveMap.hh> 
 #include <core/optimization/MinimizerOptions.hh>
 #include <core/optimization/AtomTreeMinimizer.hh>
 
@@ -70,10 +77,14 @@ core::optimization::MinimizerOptions min_opts( "lbfgs_armijo_atol", 0.01, true )
 core::optimization::AtomTreeMinimizer atm;
 core::pose::Pose copy_pose; //creating a copy of mypose to speed up code
 
-//main for loop for perturb and boltzmann monte carlo
+//montecarlo object and other variables before starting for loop
 protocols::moves::MonteCarlo mc = protocols::moves::MonteCarlo( * mypose , * sfxn , 1.0 );
 core::Size total_residues = mypose->size();
-for (core::Size i = 1; i <= 5; i++) {
+core::Real mc_accept_sum = 0;
+core::Real pose_energy_sum = 0;
+
+//main for loop for perturb and boltzmann monte carlo
+for (core::Size i = 1; i <= 100; i++) {
 	core::Real uniform_random_number = numeric::random::uniform();
 	core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
 	core::Real pert1 = numeric::random::gaussian();
@@ -82,9 +93,10 @@ for (core::Size i = 1; i <= 5; i++) {
 	core::Real orig_psi = mypose->psi( randres );
 	mypose->set_phi( randres, orig_phi + pert1 );
 	mypose->set_psi( randres, orig_psi + pert2 );
-	bool test_bool = mc.boltzmann( * mypose );
-	std::cout << test_bool << std::endl;
-
+	pose_energy_sum += mc.last_score();
+	core::Real test_bool = mc.boltzmann( * mypose );
+	//std::cout << test_bool << pose_energy_sum << std::endl;
+	mc_accept_sum += test_bool;
 	core::pack::task::PackerTaskOP repack_task = core::pack::task::TaskFactory::create_packer_task( *mypose );
 	repack_task->restrict_to_repacking();
 	core::pack::pack_rotamers( *mypose, *sfxn, repack_task );
@@ -92,6 +104,13 @@ for (core::Size i = 1; i <= 5; i++) {
 	copy_pose = *mypose; //assign copy
 	atm.run( copy_pose, mm, *sfxn, min_opts ); //minimize
 	*mypose = copy_pose; //set pointer to copy
+
+	if (i % 100 == 0) {
+		core::Real mc_accept_rate = mc_accept_sum / i;
+		core::Real pose_avg_energy = pose_energy_sum / i;
+		std::cout << "The Monte Carlo acceptance rate is: " <<  mc_accept_rate << std::endl;
+		std::cout << "The average pose energy is: " << pose_avg_energy << std::endl;
+	}
 
 }
 return 0;
