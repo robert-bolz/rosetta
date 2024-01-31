@@ -1,0 +1,2 @@
+bin/rosetta_scripts.default.linuxgccrelease -in:file:s ../input_structures/1UBQ.pdb -nstruct 20 -parser:protocol ./src/apps/pilot/robert-bolz/my_awesome_rscript.xml -overwrite
+mv 1UBQ_0001.pdb ../output_structures/
