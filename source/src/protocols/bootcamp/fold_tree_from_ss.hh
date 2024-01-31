@@ -37,6 +37,9 @@
 //Auto Headers
 #include <core/pack/dunbrack/DunbrackRotamer.hh>
 
+namespace protocols {
+namespace bootcamp {
+
 utility::vector1< std::pair< core::Size, core::Size > >
 	identify_secondary_structure_spans( std::string const & ss_string );
 
@@ -45,3 +48,6 @@ core::kinematics::FoldTree fold_tree_from_ss (core::pose::Pose mypose );
 core::kinematics::FoldTree fold_tree_from_dssp_string ( std::string dssp_string ); 
 		
 #endif
+
+}
+}
