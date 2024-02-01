@@ -95,6 +95,12 @@ void BootCampMover::set_score_function(core::scoring::ScoreFunctionOP sfxn) {
 	sfxn_ = sfxn;
 }
 
+core::Size BootCampMover::get_num_iterations() { return num_iterations_; }
+
+void BootCampMover::set_num_iterations(core::Size num_iterations) {
+	num_iterations_ = num_iterations;
+}
+
 void BootCampMover::apply( core::pose::Pose& mypose){
 
 //core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
@@ -123,7 +129,7 @@ core::kinematics::FoldTree ft_test = protocols::bootcamp::fold_tree_from_ss( myp
 core::pose::correctly_add_cutpoint_variants( mypose );
 
 //main for loop for perturb and boltzmann monte carlo
-for (core::Size i = 1; i <= 100; i++) {
+for (core::Size i = 1; i <= num_iterations_; i++) {
 	core::Real uniform_random_number = numeric::random::uniform();
 	core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
 	core::Real pert1 = numeric::random::gaussian();

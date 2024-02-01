@@ -110,7 +110,17 @@ public:
 		std::cout << "Mac check here, the default sfxn is " << default_sfxn << std::endl;
 		bcm_op->set_score_function(core::scoring::get_score_function());
 		core::scoring::ScoreFunctionOP test_sfxn = bcm_op->get_score_function();
-		std::cout << "Mac check here, the default sfxn is " << test_sfxn << std::endl;
+		std::cout << "Mac check here, the test sfxn is " << test_sfxn << std::endl;
 		TS_ASSERT( default_sfxn != test_sfxn );
+	}
+
+	void test_num_iterations() {
+		protocols::moves::MoverOP base_mover_op = protocols::moves::MoverFactory::get_instance()->newMover("BootCampMover");
+		protocols::bootcamp::BootCampMoverOP bcm_op = utility::pointer::dynamic_pointer_cast< protocols::bootcamp::BootCampMover > ( base_mover_op );
+		core::Size test_var = 300;
+		bcm_op->set_num_iterations(test_var);
+		core::Size test_num_iterations = bcm_op->get_num_iterations();
+		std::cout << "Mac check here, the default iteration is " << test_num_iterations << std::endl;
+		TS_ASSERT( 300 == test_num_iterations );
 	}
 };
