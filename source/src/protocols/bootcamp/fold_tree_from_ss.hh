@@ -46,8 +46,7 @@ utility::vector1< std::pair< core::Size, core::Size > >
 core::kinematics::FoldTree fold_tree_from_ss (core::pose::Pose mypose );
 
 core::kinematics::FoldTree fold_tree_from_dssp_string ( std::string dssp_string ); 
-		
-#endif
 
 }
 }
+#endif

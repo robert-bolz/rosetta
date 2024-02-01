@@ -68,7 +68,7 @@ else {
 core::pose::PoseOP mypose = core::import_pose::pose_from_file( filenames[1] ); //this stores the inputed file 'filenames[1]' as a pose using the pose class. Default checks if its a PDB
 
 core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
-sxfn->set_weight(core::scoring::linear_chainbreak, 1.0)
+sfxn->set_weight(core::scoring::linear_chainbreak, 1.0)
 
 core::Real score = sfxn->score( * mypose ); //store score
 std::cout << score << std::endl;
@@ -93,7 +93,7 @@ core::Real pose_energy_sum = 0;
 
 //Create FoldTree for pose, before perturbing structure in loop
 core::kinematics::FoldTree ft_test = protocols::bootcamp::fold_tree_from_ss( mypose );
-core::pose::variant_util::correctly_add_cutpoint_variants( mypose )
+core::pose::correctly_add_cutpoint_variants( mypose )
 
 //main for loop for perturb and boltzmann monte carlo
 for (core::Size i = 1; i <= 100; i++) {
