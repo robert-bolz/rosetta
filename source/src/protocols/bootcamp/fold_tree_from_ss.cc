@@ -82,7 +82,7 @@ core::kinematics::FoldTree fold_tree_from_dssp_string ( std::string dssp_string 
 
 	core::Size root_res = ss_bounds[1].second - ((ss_bounds[1].second - ss_bounds[1].first) / 2);
 	
-    if (root_res != 1) {
+    if (root_res != 1) { 
         ft.add_edge( root_res, 1, core::kinematics::Edge::PEPTIDE );
     }
     if (root_res != ss_bounds[1].second) {

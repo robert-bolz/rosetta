@@ -1,0 +1,9 @@
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/1_1/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/1_2/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/1_3/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/2_1/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/2_2/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/2_3/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/3_1/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/3_2/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags
+cd /home/rbolz/rosetta_bootcamp/rosetta/lab_7/outputs/3_3/ && /home/rbolz/rosetta_bootcamp/rosetta/source/bin/relax.default.linuxgccrelease @/home/rbolz/rosetta_bootcamp/rosetta/lab_7/scripts/relax_inputs.flags

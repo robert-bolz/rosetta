@@ -50,6 +50,12 @@
 #include <protocols/bootcamp/fold_tree_from_ss.hh>
 #include <core/pose/variant_util.hh>
 
+//JobDistributor includes to use mover
+#include <core/pack/task/operation/TaskOperations.hh>
+#include <core/pack/task/TaskFactory.hh>
+#include <protocols/jd2/JobDistributor.hh>
+#include <protocols/bootcamp/BootCampMover.hh>
+
 //using namespace core::import_pose; //only uncomment if I want to use namespace import pose
 //using namespace core::pose; //only uncomment if I want to use namespace pose
 
@@ -67,64 +73,8 @@ else {
 }
 core::pose::PoseOP mypose = core::import_pose::pose_from_file( filenames[1] ); //this stores the inputed file 'filenames[1]' as a pose using the pose class. Default checks if its a PDB
 
-core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
-sfxn->set_weight(core::scoring::linear_chainbreak, 1.0)
-
-core::Real score = sfxn->score( * mypose ); //store score
-std::cout << score << std::endl;
-
-//PyMOL viewer code below
-protocols::moves::PyMOLObserverOP the_observer = protocols::moves::AddPyMOLObserver( *mypose, true, 0 );
-the_observer->pymol().apply( *mypose);
-
-//MoveMap instantiate and other minimization objects
-core::kinematics::MoveMap mm;
-mm.set_bb( true );
-mm.set_chi( true );
-core::optimization::MinimizerOptions min_opts( "lbfgs_armijo_atol", 0.01, true );
-core::optimization::AtomTreeMinimizer atm;
-core::pose::Pose copy_pose; //creating a copy of mypose to speed up code
-
-//montecarlo object and other variables before starting for loop
-protocols::moves::MonteCarlo mc = protocols::moves::MonteCarlo( * mypose , * sfxn , 1.0 );
-core::Size total_residues = mypose->size();
-core::Real mc_accept_sum = 0;
-core::Real pose_energy_sum = 0;
-
-//Create FoldTree for pose, before perturbing structure in loop
-core::kinematics::FoldTree ft_test = protocols::bootcamp::fold_tree_from_ss( mypose );
-core::pose::correctly_add_cutpoint_variants( mypose )
-
-//main for loop for perturb and boltzmann monte carlo
-for (core::Size i = 1; i <= 100; i++) {
-	core::Real uniform_random_number = numeric::random::uniform();
-	core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
-	core::Real pert1 = numeric::random::gaussian();
-	core::Real pert2 = numeric::random::gaussian();
-	core::Real orig_phi = mypose->phi( randres );
-	core::Real orig_psi = mypose->psi( randres );
-	mypose->set_phi( randres, orig_phi + pert1 );
-	mypose->set_psi( randres, orig_psi + pert2 );
-	pose_energy_sum += mc.last_score();
-	core::Real test_bool = mc.boltzmann( * mypose );
-	//std::cout << test_bool << pose_energy_sum << std::endl;
-	mc_accept_sum += test_bool;
-	core::pack::task::PackerTaskOP repack_task = core::pack::task::TaskFactory::create_packer_task( *mypose );
-	repack_task->restrict_to_repacking();
-	core::pack::pack_rotamers( *mypose, *sfxn, repack_task );
-
-	copy_pose = *mypose; //assign copy
-	atm.run( copy_pose, mm, *sfxn, min_opts ); //minimize
-	*mypose = copy_pose; //set pointer to copy
-
-	if (i % 100 == 0) {
-		core::Real mc_accept_rate = mc_accept_sum / i;
-		core::Real pose_avg_energy = pose_energy_sum / i;
-		std::cout << "The Monte Carlo acceptance rate is: " <<  mc_accept_rate << std::endl;
-		std::cout << "The average pose energy is: " << pose_avg_energy << std::endl;
-	}
-
-}
+protocols::bootcamp::BootCampMoverOP bootcamp_mover( new protocols::bootcamp::BootCampMover)
+protocols::jd2::JobDistributor::get_instance()->go(bootcamp_mover);
 return 0;
 }
 

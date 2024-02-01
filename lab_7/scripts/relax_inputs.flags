@@ -1,0 +1,9 @@
+-database /home/rbolz/rosetta_bootcamp/rosetta/database/ 
+-in:file:s /home/rbolz/rosetta_bootcamp/rosetta/lab_7/inputs/5J0K_A.pdb
+-ex1
+-ex2aro
+-nstruct 3
+-run:repeat 5
+-relax:constrain_relax_to_start_coords
+-out:file:silent 5J0K.out
+-out:prefix r_
