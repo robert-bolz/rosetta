@@ -102,4 +102,15 @@ public:
 		protocols::bootcamp::BootCampMoverOP bcm_op = utility::pointer::dynamic_pointer_cast< protocols::bootcamp::BootCampMover > ( base_mover_op );
 		TS_ASSERT( bcm_op != 0 );
 	}
+	void test_score_function() {
+		protocols::moves::MoverOP base_mover_op = protocols::moves::MoverFactory::get_instance()->newMover("BootCampMover");
+		protocols::bootcamp::BootCampMoverOP bcm_op = utility::pointer::dynamic_pointer_cast< protocols::bootcamp::BootCampMover > ( base_mover_op );
+		
+		core::scoring::ScoreFunctionOP default_sfxn = bcm_op->get_score_function();
+		std::cout << "Mac check here, the default sfxn is " << default_sfxn << std::endl;
+		bcm_op->set_score_function(core::scoring::get_score_function());
+		core::scoring::ScoreFunctionOP test_sfxn = bcm_op->get_score_function();
+		std::cout << "Mac check here, the default sfxn is " << test_sfxn << std::endl;
+		TS_ASSERT( default_sfxn != test_sfxn );
+	}
 };

@@ -88,21 +88,20 @@ BootCampMover::~BootCampMover(){}
 	/////////////////////
 
 /// @brief Apply the mover
-public:
 
-void get_score_function() {return sfxn_};
+core::scoring::ScoreFunctionOP BootCampMover::get_score_function() { return sfxn_; }
 
-void set_score_function(core::scoring::ScoreFunctionOP sfxn) {
+void BootCampMover::set_score_function(core::scoring::ScoreFunctionOP sfxn) {
 	sfxn_ = sfxn;
-};
+}
 
-void BootCampMover::apply( core::pose::Pose& mypose ){
+void BootCampMover::apply( core::pose::Pose& mypose){
 
 //core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
-set_score_function(sfxn_)
-sfxn->set_weight(core::scoring::linear_chainbreak, 1.0);
+//set_score_function(sfxn)
+sfxn_->set_weight(core::scoring::linear_chainbreak, 1.0);
 
-core::Real score = sfxn->score( mypose ); //store score
+core::Real score = sfxn_->score( mypose ); //store score
 std::cout << score << std::endl;
 
 //MoveMap instantiate and other minimization objects
@@ -114,7 +113,7 @@ core::optimization::AtomTreeMinimizer atm;
 core::pose::Pose copy_pose; //creating a copy of mypose to speed up code
 
 //montecarlo object and other variables before starting for loop
-protocols::moves::MonteCarlo mc = protocols::moves::MonteCarlo( mypose , * sfxn , 1.0 );
+protocols::moves::MonteCarlo mc = protocols::moves::MonteCarlo( mypose , * sfxn_ , 1.0 );
 core::Size total_residues = mypose.size();
 core::Real mc_accept_sum = 0;
 core::Real pose_energy_sum = 0;
@@ -139,10 +138,10 @@ for (core::Size i = 1; i <= 100; i++) {
 	mc_accept_sum += test_bool;
 	core::pack::task::PackerTaskOP repack_task = core::pack::task::TaskFactory::create_packer_task( mypose );
 	repack_task->restrict_to_repacking();
-	core::pack::pack_rotamers( mypose, *sfxn, repack_task );
+	core::pack::pack_rotamers( mypose, *sfxn_, repack_task );
 
 	copy_pose = mypose; //assign copy
-	atm.run( copy_pose, mm, *sfxn, min_opts ); //minimize
+	atm.run( copy_pose, mm, *sfxn_, min_opts ); //minimize
 	mypose = copy_pose; //set pointer to copy
 
 	if (i % 100 == 0) {
@@ -248,9 +247,6 @@ BootCampMover::provide_citation_info(basic::citation_manager::CitationCollection
 ////////////////////////////////////////////////////////////////////////////////
 	/// private methods ///
 	///////////////////////
-private:
-
-core::scoring::ScoreFunctionOP sfxn_;
 
 std::ostream &
 operator<<( std::ostream & os, BootCampMover const & mover )
