@@ -86,7 +86,11 @@ public:
 	/////////////////////
 	/// Mover Methods ///
 	/////////////////////
+	void
+	get_score_function();
 
+	void 
+	set_score_function(core::scoring::ScoreFunctionOP sfxn);
 
 	/// @brief Apply the mover
 	void
@@ -135,6 +139,7 @@ public: //Function overrides needed for the citation manager:
 	void provide_citation_info(basic::citation_manager::CitationCollectionList & citations) const override;
 
 private: // methods
+core::scoring::ScoreFunctionOP sfxn_;
 
 private: // data
 

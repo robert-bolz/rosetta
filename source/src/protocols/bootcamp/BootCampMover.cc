@@ -88,9 +88,18 @@ BootCampMover::~BootCampMover(){}
 	/////////////////////
 
 /// @brief Apply the mover
+public:
+
+void get_score_function() {return sfxn_};
+
+void set_score_function(core::scoring::ScoreFunctionOP sfxn) {
+	sfxn_ = sfxn;
+};
+
 void BootCampMover::apply( core::pose::Pose& mypose ){
 
-core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
+//core::scoring::ScoreFunctionOP sfxn = core::scoring::get_score_function(); //creates an Owning Pointer of the default score function
+set_score_function(sfxn_)
 sfxn->set_weight(core::scoring::linear_chainbreak, 1.0);
 
 core::Real score = sfxn->score( mypose ); //store score
@@ -239,7 +248,9 @@ BootCampMover::provide_citation_info(basic::citation_manager::CitationCollection
 ////////////////////////////////////////////////////////////////////////////////
 	/// private methods ///
 	///////////////////////
+private:
 
+core::scoring::ScoreFunctionOP sfxn_;
 
 std::ostream &
 operator<<( std::ostream & os, BootCampMover const & mover )
