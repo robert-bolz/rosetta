@@ -59,7 +59,6 @@
 // Basic/Utility headers
 #include <basic/datacache/DataMap.fwd.hh>
 #include <utility/tag/XMLSchemaGeneration.fwd.hh> //transcluded from Mover
-#include <basic/protocols/DataMap.hh>
 
 #include <basic/citation_manager/UnpublishedModuleInfo.fwd.hh>
 
@@ -98,11 +97,11 @@ public:
 	void 
 	set_score_function(core::scoring::ScoreFunctionOP sfxn);
 
-	core::Size
-	get_num_iterations();
+	//core::Size
+	//get_num_iterations();
 
-	void 
-	set_num_iterations(core::Size num_iterations);
+	//void 
+	//set_num_iterations(core::Size num_iterations);
 
 	/// @brief Apply the mover
 	void
@@ -155,7 +154,7 @@ private: // methods
 
 private: // data
 	core::scoring::ScoreFunctionOP sfxn_;
-	core::Size num_iterations_;
+	//core::Size num_iterations_;
 };
 
 std::ostream &

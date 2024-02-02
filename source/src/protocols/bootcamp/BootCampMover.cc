@@ -59,7 +59,6 @@
 // XSD Includes
 #include <utility/tag/XMLSchemaGeneration.hh>
 #include <protocols/moves/mover_schemas.hh>
-#include <basic/protocols/DataMap.hh>
 
 // Citation Manager
 #include <utility/vector1.hh>
