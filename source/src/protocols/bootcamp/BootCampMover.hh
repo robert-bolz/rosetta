@@ -58,7 +58,8 @@
 
 // Basic/Utility headers
 #include <basic/datacache/DataMap.fwd.hh>
-//#include <utility/tag/XMLSchemaGeneration.fwd.hh> //transcluded from Mover
+#include <utility/tag/XMLSchemaGeneration.fwd.hh> //transcluded from Mover
+#include <basic/protocols/DataMap.hh>
 
 #include <basic/citation_manager/UnpublishedModuleInfo.fwd.hh>
 
@@ -86,6 +87,11 @@ public:
 	/////////////////////
 	/// Mover Methods ///
 	/////////////////////
+
+	virtual void parse_score_function( TagCOP, basic::datacache::DataMap const &);
+
+	void parse_my_tag( TagCOP,basic::datacache::DataMap & ) override;
+
 	core::scoring::ScoreFunctionOP
 	get_score_function();
 

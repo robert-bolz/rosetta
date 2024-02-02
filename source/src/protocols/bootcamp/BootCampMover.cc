@@ -54,10 +54,12 @@
 #include <basic/Tracer.hh>
 #include <utility/tag/Tag.hh>
 #include <utility/pointer/memory.hh>
+#include <utility/tag/XMLSchemaGeneration.fwd.hh>
 
 // XSD Includes
 #include <utility/tag/XMLSchemaGeneration.hh>
 #include <protocols/moves/mover_schemas.hh>
+#include <basic/protocols/DataMap.hh>
 
 // Citation Manager
 #include <utility/vector1.hh>
@@ -95,10 +97,28 @@ void BootCampMover::set_score_function(core::scoring::ScoreFunctionOP sfxn) {
 	sfxn_ = sfxn;
 }
 
-core::Size BootCampMover::get_num_iterations() { return num_iterations_; }
+//core::Size BootCampMover::get_num_iterations() { return num_iterations_; }
 
-void BootCampMover::set_num_iterations(core::Size num_iterations) {
-	num_iterations_ = num_iterations;
+//void BootCampMover::set_num_iterations(core::Size num_iterations) {num_iterations_ = num_iterations;}
+
+void PackRotamersMover::parse_my_tag( TagCOP const tag, basic::datacache::DataMap & datamap )
+{
+	if ( tag->hasOption("nloop") ) {
+		nloop_ = tag->getOption<core::Size>("nloop",1);
+		runtime_assert( nloop_ > 0 );
+	}
+	parse_score_function( tag, datamap );
+	parse_task_operations( tag, datamap );
+}
+
+void BootCampMover::parse_score_function(
+	TagCOP const tag,
+	basic::datacache::DataMap const & datamap
+)
+{
+	ScoreFunctionOP new_score_function( protocols::rosetta_scripts::parse_score_function( tag, datamap ) );
+	if ( new_score_function == nullptr ) return;
+	score_function( new_score_function );
 }
 
 void BootCampMover::apply( core::pose::Pose& mypose){
@@ -129,7 +149,7 @@ core::kinematics::FoldTree ft_test = protocols::bootcamp::fold_tree_from_ss( myp
 core::pose::correctly_add_cutpoint_variants( mypose );
 
 //main for loop for perturb and boltzmann monte carlo
-for (core::Size i = 1; i <= num_iterations_; i++) {
+for (core::Size i = 1; i <= 100; i++) {
 	core::Real uniform_random_number = numeric::random::uniform();
 	core::Size randres = static_cast< core::Size > ( uniform_random_number * total_residues + 1 );
 	core::Real pert1 = numeric::random::gaussian();
@@ -187,7 +207,7 @@ void BootCampMover::provide_xml_schema( utility::tag::XMLSchemaDefinition & xsd 
 
 	//here you should write code to describe the XML Schema for the class.  If it has only attributes, simply fill the probided AttributeList.
 
-	protocols::moves::xsd_type_definition_w_attributes( xsd, mover_name(), "2017_bootcamp_mover_subclass", attlist );
+	protocols::moves::xsd_type_definition_w_attributes( xsd, mover_name(), "2024_bootcamp_mover_subclass", attlist );
 }
 
 
