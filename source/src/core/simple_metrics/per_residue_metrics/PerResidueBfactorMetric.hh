@@ -97,6 +97,9 @@ public:
 	std::string
 	metric() const override;
 
+	std::map< core::Size, core::Real >
+	PerResidueBfactorMetric::calculate(const core::pose::Pose & pose) const override;
+
 	/// @brief This simple metric is unpublished.  It returns robert-bolz as its author.
 	void provide_citation_info(basic::citation_manager::CitationCollectionList & ) const override;
 
