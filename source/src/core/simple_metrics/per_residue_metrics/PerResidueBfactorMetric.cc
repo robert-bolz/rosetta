@@ -84,9 +84,13 @@ PerResidueBfactorMetric::name_static() {
 std::string
 PerResidueBfactorMetric::metric() const {
 
-	return "SHORT_NAME_FOR_SCOREFILE_HEADER_DEFAULT";
+	return "b_factor";
 }
 
+std::string
+PerResidueBfactorMetric::calculate() const {
+Real const& core::pose::PDBInfo::bfactor( Size const res, Size const atom_index );
+}
 void
 PerResidueBfactorMetric::parse_my_tag(
 		utility::tag::TagCOP tag,
@@ -112,7 +116,7 @@ PerResidueBfactorMetric::provide_xml_schema( utility::tag::XMLSchemaDefinition &
 	using namespace core::select::residue_selector;
 
 	AttributeList attlist;
-	attlist + XMLSchemaAttribute::attribute_w_default("bogus_option", xsct_rosetta_bool, "test bogus option", "false");
+	attlist + XMLSchemaAttribute::attribute_w_default("atom_type", xs_string, "string describing the atom type", "C");
 
 	//attributes_for_parse_residue_selector( attlist, "residue_selector",
 	//	"Selector specifying residues." );
